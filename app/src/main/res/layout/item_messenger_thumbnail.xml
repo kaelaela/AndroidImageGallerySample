@@ -7,15 +7,15 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/thumbnail"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
+            android:layout_width="348dp"
+            android:layout_height="348dp"
             app:placeholderImage="@android:color/black"
             />
 
     <View
             android:id="@+id/shadow"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
+            android:layout_width="348dp"
+            android:layout_height="348dp"
             android:background="#4d000000"
             android:visibility="gone"
             />

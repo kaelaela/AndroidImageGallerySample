@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 public class GalleryActivity extends AppCompatActivity {
 
-    private final int COLUMN_COUNT = 4;
+    private final int COLUMN_COUNT = 3;
     private ImageListAdapter adapter;
     private FloatingActionButton fab;
 

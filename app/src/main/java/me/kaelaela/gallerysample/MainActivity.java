@@ -1,20 +1,28 @@
 package me.kaelaela.gallerysample;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.View;
+import android.widget.Toast;
 
-import static android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED;
+import static android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED;
 import static android.support.design.widget.BottomSheetBehavior.STATE_HIDDEN;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MessengerImageListAdapter adapter;
+    private static final int COLUMN_COUNT = 3;
+    private AbstractListAdapter<String> adapter;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,38 +35,87 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final View bottomSheet = findViewById(R.id.messenger_bottom_sheet);
+        final View bottomSheet = findViewById(R.id.gallery_bottom_sheet);
         final BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.setState(STATE_HIDDEN);
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.bottom_image_list);
         findViewById(R.id.messenger_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                adapter = new MessengerImageListAdapter(new MessengerImageListAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick() {
+                        behavior.setState(STATE_HIDDEN);
+                    }
+                });
+                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this,
+                        LinearLayoutManager.HORIZONTAL, false));
+                recyclerView.setAdapter(adapter);
+                findViewById(R.id.tools_layout).setVisibility(View.GONE);
                 switch (behavior.getState()) {
-                    case STATE_EXPANDED:
+                    case STATE_COLLAPSED:
                         behavior.setState(STATE_HIDDEN);
                         break;
                     case STATE_HIDDEN:
-                        behavior.setState(STATE_EXPANDED);
+                        behavior.setState(STATE_COLLAPSED);
                         break;
                 }
             }
         });
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.messenger_image_list);
-        final LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(manager);
-        adapter = new MessengerImageListAdapter(new MessengerImageListAdapter.OnItemClickListener() {
+        fab = (FloatingActionButton) findViewById(R.id.main_fab);
+        fab.hide();
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick() {
+            public void onClick(View view) {
+                fab.hide();
+                Toast.makeText(view.getContext(), "画像を送信しました", Toast.LENGTH_SHORT).show();
                 behavior.setState(STATE_HIDDEN);
             }
         });
-        recyclerView.setAdapter(adapter);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        final Point point = new Point();
+        display.getSize(point);
+        findViewById(R.id.insta_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter = new ImageListAdapter(point.x, COLUMN_COUNT, new ImageListAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int count) {
+                        if (count <= 0) {
+                            fab.hide();
+                        } else {
+                            fab.show();
+                        }
+                    }
+
+                    @Override
+                    public void onOverCount() {
+                        Snackbar.make(findViewById(R.id.bottom_image_list), "一度に送信できるのは5枚までです", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+                recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, COLUMN_COUNT));
+                recyclerView.setAdapter(adapter);
+                findViewById(R.id.tools_layout).setVisibility(View.VISIBLE);
+                switch (behavior.getState()) {
+                    case STATE_COLLAPSED:
+                        behavior.setState(STATE_HIDDEN);
+                        break;
+                    case STATE_HIDDEN:
+                        behavior.setState(STATE_COLLAPSED);
+                        break;
+                }
+            }
+        });
+
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == STATE_EXPANDED) {
+                if (newState == STATE_COLLAPSED) {
                     ContentUtil.setImageList(MainActivity.this, adapter);
                     recyclerView.scrollToPosition(0);
+                } else if (newState == STATE_HIDDEN) {
+                    fab.hide();
                 }
             }
 
@@ -68,11 +125,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.expand_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                behavior.setState(STATE_HIDDEN);
+                fab.hide();
+            }
+        });
+
+        findViewById(R.id.camera_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "カメラ起動", Toast.LENGTH_SHORT).show();
+                behavior.setState(STATE_HIDDEN);
+                fab.hide();
+            }
+        });
+        findViewById(R.id.photo_library_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 behavior.setState(STATE_HIDDEN);
                 startActivity(GalleryActivity.getIntent(v.getContext()));
+                fab.hide();
             }
         });
     }

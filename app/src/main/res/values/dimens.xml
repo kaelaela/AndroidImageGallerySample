@@ -2,4 +2,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="messenger_thumbnail_side">240dp</dimen>
+    <dimen name="bottom_sheet_height">348dp</dimen>
 </resources>

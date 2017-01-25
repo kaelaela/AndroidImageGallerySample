@@ -17,7 +17,7 @@
                 android:id="@+id/gallery_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 android:text="select from gallery"
                 />
 
@@ -25,37 +25,88 @@
                 android:id="@+id/messenger_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/gallery_button"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 android:text="messenger"
+                />
+
+        <Button
+                android:id="@+id/insta_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="instagram_dm"
                 />
 
     </LinearLayout>
 
-    <FrameLayout
-            android:id="@+id/messenger_bottom_sheet"
+    <RelativeLayout
+            android:id="@+id/gallery_bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="348dp"
+            android:background="@android:color/white"
+            android:orientation="vertical"
             app:behavior_hideable="true"
             app:layout_behavior="@string/bottom_sheet_behavior"
             >
 
-        <android.support.v7.widget.RecyclerView
-                android:id="@+id/messenger_image_list"
+        <LinearLayout
+                android:id="@+id/tools_layout"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
-                />
-
-        <Button
-                android:id="@+id/expand_button"
-                android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_gravity="bottom|start"
-                android:layout_margin="24dp"
-                android:background="@drawable/shape_circle"
-                android:text="一覧"
+                android:background="@android:color/white"
+                android:visibility="gone"
+                >
+
+            <ImageButton
+                    android:id="@+id/close_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_close_black_24dp"
+                    />
+
+            <ImageButton
+                    android:id="@+id/photo_library_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_photo_library_black_24dp"
+                    />
+
+            <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    />
+
+            <ImageButton
+                    android:id="@+id/camera_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_photo_camera_black_24dp"
+                    />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/bottom_image_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tools_layout"
                 />
 
-    </FrameLayout>
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/main_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            app:fabSize="normal"
+            android:layout_margin="24dp"
+            app:useCompatPadding="true"
+            android:src="@drawable/ic_file_upload_white_24dp"
+            />
 
 </android.support.design.widget.CoordinatorLayout>
