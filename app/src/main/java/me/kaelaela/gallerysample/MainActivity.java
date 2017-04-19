@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onOverCount() {
-                        Snackbar.make(findViewById(R.id.bottom_image_list), "一度に送信できるのは5枚までです", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.activity_main), "一度に送信できるのは5枚までです", Snackbar.LENGTH_SHORT).show();
                     }
                 });
                 recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, COLUMN_COUNT));

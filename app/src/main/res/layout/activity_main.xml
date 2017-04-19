@@ -103,10 +103,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            app:fabSize="normal"
             android:layout_margin="24dp"
-            app:useCompatPadding="true"
             android:src="@drawable/ic_file_upload_white_24dp"
+            app:fabSize="normal"
+            app:useCompatPadding="true"
             />
 
 </android.support.design.widget.CoordinatorLayout>
