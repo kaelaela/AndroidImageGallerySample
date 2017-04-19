@@ -23,7 +23,6 @@ public class ContentUtil {
         }
         Cursor cursor = resolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
         if (cursor == null) {
-            Log.d("TAG","test4");
             return;
         }
         cursor.moveToFirst();
