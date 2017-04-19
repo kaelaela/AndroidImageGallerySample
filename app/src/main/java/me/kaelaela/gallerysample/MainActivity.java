@@ -1,5 +1,6 @@
 package me.kaelaela.gallerysample;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,6 +23,7 @@ import static android.support.design.widget.BottomSheetBehavior.STATE_HIDDEN;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_FROM_MAIN = 0;
     private static final int COLUMN_COUNT = 3;
     private AbstractListAdapter<String> adapter;
     private FloatingActionButton fab;
@@ -149,6 +153,36 @@ public class MainActivity extends AppCompatActivity {
                 fab.hide();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            getMenuInflater().inflate(R.menu.main, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.saf:
+                Intent intent;
+                intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(intent, REQUEST_FROM_MAIN);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_FROM_MAIN) {
+            Snackbar.make(findViewById(android.R.id.content), data.getData().getPath(), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
