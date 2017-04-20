@@ -20,11 +20,11 @@ import java.util.List;
 
 public class MessengerImageListAdapter extends AbstractListAdapter<String> {
 
-    private OnItemClickListener mListener;
-    private List<String> mSelectedUrls = new ArrayList<>(5);
+    private OnItemClickListener listener;
+    private List<String> selectedUrls = new ArrayList<>(5);
 
     public MessengerImageListAdapter(OnItemClickListener listener) {
-        mListener = listener;
+        this.listener = listener;
     }
 
     @Override
@@ -127,7 +127,7 @@ public class MessengerImageListAdapter extends AbstractListAdapter<String> {
 
         private void toggle() {
             boolean isContain = false;
-            for (String s : mSelectedUrls) {
+            for (String s : selectedUrls) {
                 if (s.equals(url)) {
                     isContain = true;
                 }
@@ -142,16 +142,16 @@ public class MessengerImageListAdapter extends AbstractListAdapter<String> {
                 Toast.makeText(v.getContext(), "送信しました", Toast.LENGTH_SHORT).show();
                 sendButton.setVisibility(View.GONE);
                 shadow.setVisibility(View.GONE);
-                mListener.onItemClick();
+                listener.onItemClick();
             } else {
                 shadow.setVisibility(sendButton.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 sendButton.setVisibility(sendButton.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
 
-            if (mSelectedUrls.contains(url)) {
-                mSelectedUrls.remove(url);
+            if (selectedUrls.contains(url)) {
+                selectedUrls.remove(url);
             } else {
-                mSelectedUrls.add(url);
+                selectedUrls.add(url);
             }
         }
     }
