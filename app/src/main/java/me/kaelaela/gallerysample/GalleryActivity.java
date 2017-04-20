@@ -23,8 +23,7 @@ public class GalleryActivity extends AppCompatActivity {
     private FloatingActionButton fab;
 
     public static Intent getIntent(Context context) {
-        Intent intent = new Intent(context, GalleryActivity.class);
-        return intent;
+        return new Intent(context, GalleryActivity.class);
     }
 
     @Override
