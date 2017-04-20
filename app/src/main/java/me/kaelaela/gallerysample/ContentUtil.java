@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,18 +20,21 @@ public class ContentUtil {
                 return;
             }
         }
-        Cursor cursor = resolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
-        if (cursor == null) {
-            return;
+        Cursor c = resolver.query(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, null, null, null,
+                MediaStore.Images.Thumbnails.IMAGE_ID + " DESC");
+        List<String> thumbnailIds = new ArrayList<>();//Get original data by this id.
+        List<String> thumbnailPaths = new ArrayList<>();
+        if (c != null) {
+            c.moveToFirst();
+            while (!c.isAfterLast()) {
+                String data = c.getString(c.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
+                String imageId = c.getString(c.getColumnIndex(MediaStore.Images.Thumbnails.IMAGE_ID));
+                thumbnailPaths.add(data);
+                thumbnailIds.add(imageId);
+                c.moveToNext();
+            }
+            c.close();
         }
-        cursor.moveToFirst();
-        List<String> urls = new ArrayList<>();
-        while (!cursor.isLast()) {
-            Log.d("TAG", " uri:" + cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
-            urls.add(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
-            cursor.moveToNext();
-        }
-        cursor.close();
-        adapter.addAllItem(urls);
+        adapter.addAllItem(thumbnailPaths);
     }
 }
